@@ -9,7 +9,8 @@ int valida_cpf(char *cpf);
 
 int main (void)
 {
-	char *cpf = "12345A789-12";
+	         //  012345678901
+	char *cpf = "123456789-01";
     int valor = valida_cpf(cpf);
 
 	if (valor == true)
@@ -42,37 +43,79 @@ int is_number(char key)
 
 int is_only_number(char *cpf)
 {
-	(void) cpf;
+	int	i;
+
+	i = 0;
+	while (cpf[i] != '\0')
+	{
+		if (i == 9)
+			i++;
+		if (is_number(cpf[i]) == false)
+			return(false);
+		i++;
+	}
     return (true);
 }
 
 int valida_cpf(char *cpf)
 {
     int i;
+    int digitverific;
 
-	char x = '9';
-	if (is_number(x) == true)
-		printf ("%c is a number!\n", x);
-	else
-	{ printf("%c is not a number! :(\n", x); }
-	
+
 	printf("CPF lenght: %d\n", ft_strlen(cpf));
 	if (ft_strlen(cpf) != 12)
+	{
+		printf("CPF is of wrong size!\n");
 		return (false);
+	}
 
     if (cpf[9] != '-')
+	{
+		printf("CPF is lacking the digit\n");
     	return (false);
+	}
     
     if (is_only_number(cpf) == false)
+	{
+		printf ("CPF is not only numbers!\n");
         return (false);
+	}
 
     i = 0;
-	(void) i;
-    // while (i < 12)
-	// {
-    //   printf("%c", cpf[i]);
-    //     i++;
-	// }
-    // printf("\n");
+    digitverific = 0;
+    
+	while (i < 9)
+	{
+        digitverific += (cpf[i] - 48) * (i + 1);
+        i++;
+	}
+	printf ("Our result: %d. Expected result: 285\n", digitverific);
+    digitverific = digitverific % 11;
+    if (digitverific == 10)
+        digitverific = 0;
+    printf ("%d\n", cpf[10]);
+    if (digitverific != cpf[10] - 48)
+    {
+        printf("o valor de digitverific é: %d\no valor esperado era: %c\n", digitverific, cpf[10]);
+        return (false);	
+    }
+
+	digitverific = 0;
+	i = 0;
+	while (i < 9)
+	{
+        digitverific += (cpf[i] - 48) * i;
+        i++;
+	}
+	digitverific += (cpf[10] - 48) * 9;
+	digitverific = digitverific % 11;
+	if (digitverific == 10)
+        digitverific = 0;
+	if (digitverific != cpf[11] - 48)
+    {
+        printf("o valor de digitverific é: %d\no valor esperado era: %c\n", digitverific, cpf[11]);
+        return (false);	
+    }
     return (true);
 }
