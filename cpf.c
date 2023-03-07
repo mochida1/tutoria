@@ -9,8 +9,7 @@ int valida_cpf(char *cpf);
 
 int main (void)
 {
-	         //  012345678901
-	char *cpf = "123456789-01";
+	char *cpf = "000000001-91";
     int valor = valida_cpf(cpf);
 
 	if (valor == true)
@@ -57,13 +56,54 @@ int is_only_number(char *cpf)
     return (true);
 }
 
+int my_strcmp(char *str1, char *str2)
+{
+    int idx;
+	
+    idx = 0;
+    while (str1[idx] != '\0' && str2[idx] != 0)
+    {
+        if (str1[idx] != str2[idx])
+            return (false);
+        idx++;
+    }
+    return (true);
+}
+
+int is_edgecase(char *cpf) // mudar para 'se tudo igual' retorna falso
+{
+    if (my_strcmp(cpf, "111111111-11"))
+	{
+		return (false);
+	}
+    if (my_strcmp(cpf, "000000000-00"))
+    {
+        return (false);
+    }
+	return (true);
+}
+
+int is_edgecase2(char *cpf)
+{
+	int idx;
+
+	idx = 0;
+	while (cpf[idx])
+	{	
+		if (idx == 9)
+			idx++;
+		if (cpf[0] != cpf[idx])
+			return (true);
+		idx++;
+	}
+	return (false);
+}
+
 int valida_cpf(char *cpf)
 {
     int i;
     int digitverific;
 
-
-	printf("CPF lenght: %d\n", ft_strlen(cpf));
 	if (ft_strlen(cpf) != 12)
 	{
 		printf("CPF is of wrong size!\n");
@@ -82,6 +122,12 @@ int valida_cpf(char *cpf)
         return (false);
 	}
 
+    if (is_edgecase2(cpf) == false)
+    {
+        printf("especific wrong number\n");
+        return (false);
+    }
+
     i = 0;
     digitverific = 0;
     
@@ -90,7 +136,6 @@ int valida_cpf(char *cpf)
         digitverific += (cpf[i] - 48) * (i + 1);
         i++;
 	}
-	printf ("Our result: %d. Expected result: 285\n", digitverific);
     digitverific = digitverific % 11;
     if (digitverific == 10)
         digitverific = 0;
